@@ -2,9 +2,9 @@
 
 ## 👑 Admin Login
 
-Email: admin_1@gmail.com
+Email: ayyazadmin@booksharing-platform.com
 
-Password: admin@0123
+Password: Ayyaz@7613341
 
 ## 👑 2 Users registered for checking workflow
 
