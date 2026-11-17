@@ -1208,3 +1208,38 @@ img {
     font-size: 16px;
   }
 }
+
+/* ===== Header mobile fix (2026 update 4) ===== */
+@media (max-width: 768px) {
+  .navbar > .container > .d-flex {
+    flex-wrap: nowrap;
+  }
+
+  /* the centred "Admin Panel" heading breaks the mobile header - hide it on small screens */
+  header .navbar h5.mx-auto {
+    display: none !important;
+  }
+
+  header .navbar img {
+    width: 24px !important;
+  }
+
+  header .navbar h5 {
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  header .navbar .gap-3 {
+    gap: 6px !important;
+  }
+
+  header .navbar a.text-white {
+    font-size: 1.05rem !important;
+  }
+
+  header .navbar .btn {
+    padding: 4px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
