@@ -1028,3 +1028,79 @@ body.borrow-page {
     vertical-align: middle;
 }
 
+/* ===== Professional Footer (2026 update) ===== */
+.footer {
+  padding: 50px 0 0;
+  border-top: 4px solid #0d6efd;
+}
+
+.footer h5 {
+  position: relative;
+  padding-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+
+.footer h5::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 38px;
+  height: 3px;
+  background: #0d6efd;
+  border-radius: 2px;
+}
+
+.footer-brand {
+  font-size: 20px !important;
+}
+
+.footer-about {
+  line-height: 1.7;
+  max-width: 320px;
+}
+
+.footer-bottom {
+  margin-top: 40px;
+  padding: 18px 0;
+  background: rgba(0, 0, 0, 0.28);
+  border-top: 1px solid #3a3a4a;
+  color: #bbb;
+  font-size: 14px;
+}
+
+.footer-bottom strong {
+  color: #fff;
+}
+
+/* ===== Responsive fixes (mobile) ===== */
+img {
+  max-width: 100%;
+}
+
+.search-input {
+  width: min(500px, 78vw);
+}
+
+.borrow-card {
+  width: min(550px, 94vw);
+}
+
+@media (max-width: 576px) {
+  .navbar > .container > .d-flex {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  header .navbar h5 {
+    font-size: 15px;
+  }
+
+  .footer-about {
+    max-width: 100%;
+  }
+
+  .footer-bottom {
+    text-align: center;
+  }
+}
