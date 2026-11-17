@@ -113,15 +113,10 @@
                     <h5>Quick Links</h5>
                     <ul>
                         <li><a href="{{ url_for('home') }}">Home</a></li>
-                        {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
                         <li><a href="{{ url_for('my_books') }}">My Books</a></li>
                         <li><a href="{{ url_for('add_book') }}">Add Book</a></li>
                         <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
-                        {% else %}
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
-                        <li><a href="{{ url_for('register') }}">Sign Up</a></li>
-                        {% endif %}
                     </ul>
                 </div>
                 <div class="col-md-4">
