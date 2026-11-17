@@ -8,13 +8,6 @@
     <h2>📖 My Borrowed Books</h2>
     <p>Books you have borrowed from other members</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
 
     {% if borrowed_books %}
     <div class="table-responsive">

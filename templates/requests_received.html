@@ -8,13 +8,6 @@
     <h2>📬 Requests Received</h2>
     <p>Borrow requests for your books</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
 
     {% if requests %}
     <div class="table-responsive">
