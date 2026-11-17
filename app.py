@@ -280,16 +280,6 @@ def create_app():
             db.create_all()
             seed_database()   #  one-time: restore original data on a fresh database
 
-            # One-time admin credential update: applied only when the owner has set
-            # ADMIN_NEW_EMAIL and ADMIN_NEW_PASSWORD in the hosting environment.
-            _new_admin_email = os.environ.get('ADMIN_NEW_EMAIL')
-            _new_admin_password = os.environ.get('ADMIN_NEW_PASSWORD')
-            if _new_admin_email and _new_admin_password:
-                _admin = User.query.filter_by(role='admin').first()
-                if _admin and _admin.email != _new_admin_email:
-                    _admin.email = _new_admin_email
-                    _admin.password_hash = generate_password_hash(_new_admin_password)
-                    db.session.commit()
 
 
 # ===============Authentication Routes=================
