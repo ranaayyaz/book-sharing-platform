@@ -1243,3 +1243,40 @@ img {
     white-space: nowrap;
   }
 }
+
+/* ===== Header bell fix (2026 update 5) ===== */
+@media (max-width: 768px) {
+  .navbar > .container > .d-flex {
+    gap: 10px;
+  }
+
+  /* left group may shrink so the right side always keeps its space */
+  header .navbar .d-flex.gap-2 {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  header .navbar h5 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* bell as a round professional icon button */
+  header .navbar a.text-white {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 1rem !important;
+    flex: 0 0 auto;
+    line-height: 1;
+  }
+
+  header .navbar .gap-3 {
+    gap: 8px !important;
+    flex: 0 0 auto;
+  }
+}
