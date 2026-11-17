@@ -233,8 +233,11 @@ def create_app():
     #  database Path: DATABASE_URL if set (online db); on Vercel, /tmp seeded from the bundled database; local default otherwise
     _db_uri = os.environ.get('DATABASE_URL')
     if _db_uri:
-        if _db_uri.startswith('postgres://'):
-            _db_uri = _db_uri.replace('postgres://', 'postgresql://', 1)
+        #  normalise to the psycopg2 driver: plain 'postgresql://' would make
+        #  SQLAlchemy look for the psycopg v3 package, which is not installed
+        _db_uri = _db_uri.replace('postgres://', 'postgresql://', 1)
+        if _db_uri.startswith('postgresql://'):
+            _db_uri = _db_uri.replace('postgresql://', 'postgresql+psycopg2://', 1)
     elif os.environ.get('VERCEL'):
         _tmp_db = '/tmp/database.db'
         if not os.path.exists(_tmp_db):
