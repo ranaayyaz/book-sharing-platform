@@ -269,6 +269,7 @@ def create_app():
     db.init_app(app)                         #   connect database to flask app
     login_manager.init_app(app)              #   connect login system to flask app
     login_manager.login_view = 'login'       #   if logout redirect to login page
+    login_manager.login_message_category = 'warning'   #   show the sign-in reminder as a proper warning box
 
     @app.before_request
     def before_request():
@@ -432,13 +433,13 @@ def create_app():
     # Check book status for current user
         request = Request.query.filter_by(book_id=book_id, borrower_id=current_user.id, status='accepted').first()
         if not request:
-        #    flash('You have not borrowed this book!', 'danger')
+           flash('You have not borrowed this book!', 'danger')
            return redirect(url_for('home'))
         book.status = 'available'
         request.status = 'returned'
         db.session.commit()
     
-        # flash(f'✅ "{book.title}" has been returned successfully!', 'success')
+        flash(f'✅ "{book.title}" has been returned successfully!', 'success')
         return redirect(url_for('home'))
 
 #========================Borrow Route========================
@@ -459,13 +460,13 @@ def create_app():
     # =====Check book status=====
     
         if book.status != 'available':
-        #    flash('This book is no longer available!', 'danger')
+           flash('This book is no longer available!', 'danger')
            return redirect(url_for('home'))
     
     # =====Owner not borrow own books=====
     
         if book.user_id == current_user.id:
-        #    flash('You cannot request your own book!', 'danger')
+           flash('You cannot request your own book!', 'danger')
            return redirect(url_for('home'))
     
     # ===========Form Data==========
@@ -490,7 +491,7 @@ def create_app():
         db.session.add(new_request)
         db.session.commit()
         update_notification_count(book.user_id) 
-        # flash(f'✅ Request for "{book.title}" sent successfully!', 'success')
+        flash(f'✅ Request for "{book.title}" sent successfully!', 'success')
         return redirect(url_for('dashboard'))
 
 
@@ -525,7 +526,7 @@ def create_app():
     # =====Check current user request=====
     
         if req.owner_id != current_user.id:
-           #    flash('You are not authorized!', 'danger')
+           flash('You are not authorized!', 'danger')
            return redirect(url_for('dashboard'))
         book = Book.query.get(req.book_id)    
         req.status = 'accepted'
@@ -535,7 +536,7 @@ def create_app():
         book.status = 'borrowed'
         db.session.commit()
         update_notification_count(req.borrower_id)  
-        # flash(f'Request for "{book.title}" accepted!', 'success')
+        flash(f'Request for "{book.title}" accepted!', 'success')
         return redirect(url_for('requests_received'))
 
 #=========================Reject Request Route========================
@@ -546,7 +547,7 @@ def create_app():
         req = Request.query.get_or_404(request_id)
     
         if req.owner_id != current_user.id:
-           #    flash('You are not authorized!', 'danger')
+           flash('You are not authorized!', 'danger')
            return redirect(url_for('dashboard'))
     
         rejection_reason = request.form.get('rejection_reason', '')
@@ -556,7 +557,7 @@ def create_app():
         req.rejection_reason = rejection_reason
         db.session.commit()
         update_notification_count(req.borrower_id)
-        # flash(f'Request for "{req.book.title}" rejected! Reason: {rejection_reason}', 'danger')
+        flash(f'Request for "{req.book.title}" rejected! Reason: {rejection_reason}', 'danger')
         return redirect(url_for('requests_received'))
     
 #=========================Search Route========================
@@ -649,6 +650,7 @@ def create_app():
         
           db.session.add(new_book)
           db.session.commit()
+          flash(f'📚 "{new_book.title}" has been added successfully!', 'success')
           return redirect(url_for('dashboard'))
     
        return render_template('add_book.html')
@@ -707,18 +709,18 @@ def create_app():
            confirm_pw = request.form.get("confirm_password") or ""
 
            if not check_password_hash(current_user.password_hash, current_pw):
-            #   flash("Current password is incorrect.", "danger")
+              flash("Current password is incorrect.", "danger")
               errors.append("Current password is incorrect.")
 
            if len(new_pw) < 6:
                errors.append("New password must be at least 6 characters long.")
            if new_pw != confirm_pw:
-            #   flash("New Password and confirmation do not match.", "danger")
+              flash("New Password and confirmation do not match.", "danger")
               errors.append("New Password and confirmation do not match.")
            if not errors:
                current_user.password_hash = generate_password_hash(new_pw)
                db.session.commit()
-               # flash("Password updated successfully.", "success")
+               flash("Password updated successfully.", "success")
                return redirect(url_for("profile"))
 
         return render_template('profile.html', 
@@ -745,7 +747,7 @@ def create_app():
     # If not available book, flash message and return 404
     
         if not book:
-        #    flash('Book not found!', 'danger')
+           flash('Book not found!', 'danger')
 
            return "Book not found", 404
         book_title = book.title 
@@ -753,7 +755,7 @@ def create_app():
     #=====check current user is owner or not========
     
         if book.user_id != current_user.id:
-           #    flash('You are not authorized to delete this book!', 'danger')
+           flash('You are not authorized to delete this book!', 'danger')
            return "You are not authorized to delete this book", 403
         book_title = book.title
         requests = Request.query.filter_by(book_id=book.id).all()
@@ -773,11 +775,11 @@ def create_app():
     def edit_book(book_id):
         book = Book.query.get(book_id)
         if not book:
-        #    flash('Book not found!', 'danger')
+           flash('Book not found!', 'danger')
            return redirect(url_for('my_books'))
     
         if book.user_id != current_user.id:
-        #    flash('You are not authorized to edit this book!', 'danger')
+           flash('You are not authorized to edit this book!', 'danger')
            return redirect(url_for('my_books'))
     
         if request.method == 'POST':
@@ -807,7 +809,7 @@ def create_app():
            if book.type == 'digital':
               book.location = ''
            db.session.commit()
-        #    flash(f'📚 "{book.title}" has been updated successfully!', 'success')
+           flash(f'📚 "{book.title}" has been updated successfully!', 'success')
            return redirect(url_for('my_books'))
     
         return render_template('edit_book.html', book=book)
@@ -837,7 +839,7 @@ def create_app():
                db.session.delete(req)
            db.session.delete(book)
            db.session.commit()
-           #    flash(f'Book "{book.title}" has been deleted by admin!', 'success')
+        flash(f'Book "{book.title}" has been deleted by admin!', 'success')
         return redirect(url_for('admin_dashboard'))
 
 #=========================Admin Delete User Route========================
@@ -850,7 +852,7 @@ def create_app():
         if user and user.role != 'admin':
            db.session.delete(user)
            db.session.commit()
-           #    flash(f'User "{user.username}" has been deleted!', 'success')
+        flash(f'User "{user.username}" has been deleted!', 'success')
         return redirect(url_for('admin_dashboard'))
 
 #=========================Admin Toggle Block User Route========================
@@ -864,7 +866,7 @@ def create_app():
            user.is_blocked = not getattr(user, 'is_blocked', False)
            db.session.commit()
            status = "blocked" if user.is_blocked else "unblocked"
-           #    flash(f'User "{user.username}" has been {status}!', 'success')
+           flash(f'User "{user.username}" has been {status}!', 'success')
            return redirect(request.referrer or url_for('admin_users'))
 
 #=========================Admin View User Details Route========================
@@ -887,7 +889,7 @@ def create_app():
     # Only Owner can suggest alternative
     
         if req.owner_id != current_user.id:
-           #    flash('You are not authorized!', 'danger')
+           flash('You are not authorized!', 'danger')
            return redirect(url_for('dashboard'))
     
         if request.method == 'POST':
@@ -897,7 +899,7 @@ def create_app():
            req.alternative_location = request.form.get('alternative_location')
            req.status = 'alternative_suggested'
            db.session.commit()
-           #    flash(f'✅ Alternative suggested for "{req.book.title}"!', 'success')
+           flash(f'✅ Alternative suggested for "{req.book.title}"!', 'success')
            return redirect(url_for('requests_received'))
     
         return render_template('suggest_alternative.html', request=req)
@@ -913,7 +915,7 @@ def create_app():
     # Check request belongs to current user (borrower)
     
         if req.borrower_id != current_user.id:
-           #    flash('You are not authorized!', 'danger')
+           flash('You are not authorized!', 'danger')
            return redirect(url_for('dashboard'))
     
     # copy alternative fields to proposed fields if they exist
@@ -934,7 +936,7 @@ def create_app():
         req.status = 'pending'
         db.session.commit()
     
-        # flash('✅ You accepted the alternative suggestion! Request sent to owner again.', 'success')
+        flash('✅ You accepted the alternative suggestion! Request sent to owner again.', 'success')
         return redirect(url_for('requests_sent'))
     
  #========================Reject Alternative Route========================   
@@ -947,7 +949,7 @@ def create_app():
     # Check request belongs to current user (borrower)
     
         if req.borrower_id != current_user.id:
-        #    flash('You are not authorized!', 'danger')
+           flash('You are not authorized!', 'danger')
            return redirect(url_for('dashboard'))
     
     # clear alternative fields and keep original proposed fields intact
@@ -958,7 +960,7 @@ def create_app():
         req.status = 'pending'
         db.session.commit()
     
-        # flash('ℹ️ You rejected the alternative suggestion. Original request is still pending.', 'info')
+        flash('ℹ️ You rejected the alternative suggestion. Original request is still pending.', 'info')
         return redirect(url_for('requests_sent'))
 
  #========================Download Book Route========================   
@@ -976,15 +978,15 @@ def create_app():
         ).first()
 
         if not borrow_record:
-        #    flash('You have not borrowed this book!', 'danger')
+           flash('You have not borrowed this book!', 'danger')
            return redirect(url_for('home'))
 
         if book.type != 'digital':
-        #    flash('This is not a digital book!', 'danger')
+           flash('This is not a digital book!', 'danger')
            return redirect(url_for('home'))
 
         if not book.file_path:
-        #    flash('No download link available!', 'danger')
+           flash('No download link available!', 'danger')
            return redirect(url_for('borrowed_books'))
 
     # Handle cases where file_path might contain both filename and external link separated by '|'
@@ -1001,7 +1003,7 @@ def create_app():
         import os
         file_full_path = os.path.join('static/uploads/books', file_to_download)
         if not os.path.exists(file_full_path):
-        #    flash('File not found on server!', 'danger')
+           flash('File not found on server!', 'danger')
            return redirect(url_for('borrowed_books'))
 
         return send_from_directory('static/uploads/books', file_to_download, as_attachment=True)
