@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Suggest Alternative{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4>💡 Suggest Alternative</h4>
+                    <p>Book: <strong>{{ request.book.title }}</strong></p>
+                </div>
+                <div class="card-body">
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Current Proposed Date</label>
+                            <input type="text" class="form-control" value="{{ request.proposed_date }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Suggest New Date</label>
+                            <input type="date" name="alternative_date" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Current Proposed Time</label>
+                            <input type="text" class="form-control" value="{{ request.proposed_time }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Suggest New Time</label>
+                            <input type="time" name="alternative_time" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Current Proposed Location</label>
+                            <input type="text" class="form-control" value="{{ request.proposed_location }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Suggest New Location</label>
+                            <input type="text" name="alternative_location" class="form-control"
+                                placeholder="e.g., New Library" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-info w-100">💡 Send Suggestion</button>
+                        <a href="{{ url_for('requests_received') }}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

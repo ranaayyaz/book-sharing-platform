@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
+    <h2>Notifications</h2>
+
+    <!-- Received Requests -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5>📬 Requests Received</h5>
+        </div>
+        <div class="card-body">
+            {% if received_requests %}
+            {% for req in received_requests %}
+            <div class="border-bottom pb-2 mb-2">
+                <p><strong>{{ req.borrower.username }}</strong> requested <strong>{{ req.book.title }}</strong></p>
+                <small>📅 {{ req.proposed_date }} | ⏰ {{ req.proposed_time }} | 📍 {{ req.proposed_location }}</small>
+                <a href="{{ url_for('requests_received') }}" class="btn btn-sm btn-primary mt-2">View →</a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No pending requests.</p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Sent Requests (Borrower) -->
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5>📤 Your Requests Status</h5>
+        </div>
+        <div class="card-body">
+            {% if sent_requests %}
+            {% for req in sent_requests %}
+            <div class="border-bottom pb-2 mb-2">
+                <p><strong>{{ req.book.title }}</strong>
+                    {% if req.status == 'accepted' %}
+                    <span class="badge bg-success">Accepted ✓</span>
+                    {% elif req.status == 'rejected' %}
+                    <span class="badge bg-danger">Rejected ✗</span>
+                    {% if req.rejection_reason %}
+                    <br><small>Reason: {{ req.rejection_reason }}</small>
+                    {% endif %}
+                    {% else %}
+                    <span class="badge bg-warning">{{ req.status }}</span>
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('requests_sent') }}" class="btn btn-sm btn-primary">View →</a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No updates on your requests.</p>
+            {% endif %}
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

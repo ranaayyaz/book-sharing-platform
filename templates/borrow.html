@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Request Borrow - Book Sharing Platform{% endblock %}
+
+{% block navbar_buttons %}
+<a href="{{ url_for('home') }}" class="back-home-btn">Back to Home</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="borrow-container">
+  <div class="borrow-card">
+    <div class="borrow-header">
+      <h4>Borrow Request Form</h4>
+      <h6>Propose an exchange for:</h6>
+      <p class="title-book">{{ book.title }}</p>
+    </div>
+
+    <hr class="borrow-hr">
+
+    <form method="POST" action="{{ url_for('request_book', book_id=book.id) }}" class="borrow-form">
+      <div class="form-group">
+        <label>Proposed Date</label>
+        <input type="date" name="proposed_date" class="form-input" required>
+        <small>When are you available to meet?</small>
+      </div>
+
+      <div class="form-group">
+        <label>Proposed Time</label>
+        <input type="time" name="proposed_time" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label>Proposed Location</label>
+        <input type="text" name="proposed_location" class="form-input" placeholder="e.g. Main Library Entrance"
+          required>
+        <small>Where should the handover happen?</small>
+      </div>
+
+      <div class="form-group">
+        <label>Message to Owner (Optional)</label>
+        <textarea name="message" class="form-textarea" placeholder="Any specific instructions..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Request</button>
+      <a href="{{ url_for('home') }}" class="cancel-btn">Cancel</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

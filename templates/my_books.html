@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}My Shared Books{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <h2>📚 My Shared Books</h2>
+    <p>Books you have shared with the community</p>
+
+    {% if books %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.category }}</td>
+                    <td>
+                        {% if book.type == 'physical' %}
+                        📖 Physical
+                        {% else %}
+                        💻 Digital
+                        {% endif %}
+                    </td>
+                    <td>{{ book.description|truncate(50) if book.description else '-' }}</td>
+                    <td>
+                        {% if book.status == 'available' %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-warning">Borrowed</span>
+                        {% endif %}
+                    </td>
+                    <td class="action-buttons">
+                        <a href="/edit_book/{{ book.id }}" class="btn-edit">✏️ Edit</a> <a
+                            href="/delete_book/{{ book.id }}" class="btn-delete"
+                            onclick="return confirm('Are you sure?')">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        You haven't shared any books yet.
+        <a href="/add_book">Click here to add a book</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

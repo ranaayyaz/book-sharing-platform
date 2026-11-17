@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}My Borrowed Books{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
+    <h2>📖 My Borrowed Books</h2>
+    <p>Books you have borrowed from other members</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% if borrowed_books %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Owner</th>
+                    <th>Pickup Date</th>
+                    <th>Pickup Time</th>
+                    <th>Location</th>
+                    <th>Download</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in borrowed_books %}
+                <tr>
+                    <td class="align-middle">{{ req.book.title }}</td>
+                    <td class="align-middle">{{ req.book.author }}</td>
+                    <td class="align-middle">{{ req.owner.username }}</td>
+                    <td class="align-middle">{{ req.proposed_date }}</td>
+                    <td class="align-middle">{{ req.proposed_time }}</td>
+                    <td class="align-middle">{{ req.proposed_location }}</td>
+
+                    <!-- DOWNLOAD BUTTON  -->
+                    <td class="align-middle">
+                        {% if req.book.type == 'digital' and req.book.file_path %}
+                        {# Check if file_path contains pipe (|) meaning both PDF and link #}
+                        {% if '|' in req.book.file_path %}
+                        {% set parts = req.book.file_path.split('|') %}
+                        {% for part in parts %}
+                        {% if part.startswith('http') %}
+                        <a href="{{ part }}" target="_blank" class="btn btn-info btn-sm d-block mb-1">🔗 Open Link</a>
+                        {% else %}
+                        <a href="/download/{{ req.book.id }}" class="btn btn-success btn-sm d-block mb-1">📥 Download
+                            PDF</a>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        {# Single item - either PDF or link #}
+                        {% if req.book.file_path.startswith('http') %}
+                        <a href="{{ req.book.file_path }}" target="_blank" class="btn btn-info btn-sm">🔗 Open Link</a>
+                        {% else %}
+                        <a href="/download/{{ req.book.id }}" class="btn btn-success btn-sm">📥 Download PDF</a>
+                        {% endif %}
+                        {% endif %}
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+
+                    <!--RETURN BUTTON  -->
+                    <td class="align-middle">
+                        <a href="/return_book/{{ req.book.id }}" class="btn btn-warning btn-sm"
+                            onclick="return confirm('Return this book?')">↩️ Return</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">You haven't borrowed any books yet.</div>
+    {% endif %}
+
+    <div class="mt-3">
+        <a href="/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

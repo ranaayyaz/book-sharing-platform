@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}View Book - Admin{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 800px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>📖 Book Details</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width:150px">Book ID</th>
+                    <td>{{ book.id }}
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ book.title }}
+                </tr>
+                <tr>
+                    <th>Author</th>
+                    <td>{{ book.author }}
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{ book.category }}
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ book.type }}
+                </tr>
+                {% if book.type == 'physical' %}
+                <tr>
+                    <th>Location</th>
+                    <td>{{ book.location or 'Not specified' }}
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        {% if book.status == 'available' %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-warning">Borrowed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ book.description or 'No description' }}
+                </tr>
+                <tr>
+                    <th>Owner</th>
+                    <td>{{ book.owner.username if book.owner else 'Unknown' }}
+                </tr>
+                <tr>
+                    <th>Cover Image</th>
+                    <td>
+                        <img src="{{ book.cover_image if book.cover_image and book.cover_image.startswith('http') else '/static/uploads/covers/' ~ (book.cover_image or 'default.jpg') }}" alt="Cover" style="max-width: 150px;">
+                    </td>
+                </tr>
+                {% if book.type == 'digital' and book.file_path %}
+                <tr>
+                    <th>File/Link</th>
+                    <td>
+                        {% if book.file_path.startswith('http') %}
+                        <a href="{{ book.file_path }}" target="_blank">Open Link</a>
+                        {% else %}
+                        <a href="/download/{{ book.id }}" target="_blank">Download PDF</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+        <div class="card-footer">
+            <a href="/admin/books" class="btn btn-secondary">← Back to Books</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

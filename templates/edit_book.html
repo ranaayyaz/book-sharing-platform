@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Book - Book Sharing Platform{% endblock %}
+
+{% block content %}
+
+<main class="addbook-main">
+    <div class="container">
+        <div class="addbook-container">
+
+            <div class="addbook-header">
+                <h2>✏️ Edit Book</h2>
+                <p>Update the details of your book!</p>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" class="addbook-form"> <!-- Book Title -->
+                <div class="form-group">
+                    <label>Book Title <span class="text-danger">*</span></label>
+                    <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
+                </div>
+
+                <!-- Author -->
+                <div class="form-group">
+                    <label>Author <span class="text-danger">*</span></label>
+                    <input type="text" name="author" class="form-control" value="{{ book.author }}" required>
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    <label>Category <span class="text-danger">*</span></label>
+                    <select name="category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="Education" {% if book.category=='Education' %}selected{% endif %}>Education
+                        </option>
+                        <option value="Technology" {% if book.category=='Technology' %}selected{% endif %}>Technology
+                        </option>
+                        <option value="Fiction" {% if book.category=='Fiction' %}selected{% endif %}>Fiction</option>
+                        <option value="Self Development" {% if book.category=='Self Development' %}selected{% endif %}>
+                            Self Development</option>
+                        <option value="History" {% if book.category=='History' %}selected{% endif %}>History</option>
+                        <option value="Biography" {% if book.category=='Biography' %}selected{% endif %}>Biography
+                        </option>
+                        <option value="Science" {% if book.category=='Science' %}selected{% endif %}>Science</option>
+                        <option value="Children" {% if book.category=='Children' %}selected{% endif %}>Children</option>
+                        <option value="Other" {% if book.category=='Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <!-- Book Type -->
+                <div class="form-group">
+                    <label>Book Type <span class="text-danger">*</span></label>
+                    <div class="type-options">
+                        <label class="type-option">
+                            <input type="radio" name="book_type" value="physical" {% if book.type=='physical'
+                                %}checked{% endif %} required>
+                            <span>📖 Physical Book</span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="book_type" value="digital" {% if book.type=='digital' %}checked{%
+                                endif %}>
+                            <span>💻 Digital Book (PDF)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Location Field (Only for Physical) -->
+                <div id="location_div" class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" class="form-control" value="{{ book.location }}"
+                        placeholder="e.g., Main Library, Shelf B-12">
+                    <small class="text-muted">Where can the borrower pick up the book?</small>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label>Description / Notes</label>
+                    <textarea name="description" class="form-control" rows="3"
+                        placeholder="e.g., Great condition, Available on weekdays">{{ book.description }}</textarea>
+                </div>
+
+                <!-- Book Cover Image -->
+                <div class="form-group">
+                    <label>Book Cover Image</label>
+                    <input type="file" name="cover_image" class="form-control" accept="image/*">
+                    <small class="text-muted">Upload a cover image for your book (JPG, PNG, WebP)</small>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">💾 Update Book</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    const radios = document.querySelectorAll('input[name="book_type"]');
+    const locationDiv = document.getElementById('location_div');
+
+    function toggleLocation() {
+        const selected = document.querySelector('input[name="book_type"]:checked').value;
+        if (selected === 'physical') {
+            locationDiv.style.display = 'block';
+        } else {
+            locationDiv.style.display = 'none';
+        }
+    }
+
+    radios.forEach(radio => radio.addEventListener('change', toggleLocation));
+    toggleLocation();
+</script>
+
+{% endblock %}

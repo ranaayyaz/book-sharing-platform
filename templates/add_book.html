@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Add Book - Book Sharing Platform{% endblock %}
+
+{% block content %}
+
+<main class="addbook-main">
+  <div class="container">
+    <div class="addbook-container">
+
+      <div class="addbook-header">
+        <h2>📚 Share a Book</h2>
+        <p>Fill the details below to add a new book to the community library!</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('add_book') }}" enctype="multipart/form-data" class="addbook-form">
+        <!-- Book Title -->
+        <div class="form-group">
+          <label>Book Title <span class="text-danger">*</span></label>
+          <input type="text" name="title" class="form-control" placeholder="e.g., Atomic Habits" required>
+        </div>
+
+        <!-- Author -->
+        <div class="form-group">
+          <label>Author <span class="text-danger">*</span></label>
+          <input type="text" name="author" class="form-control" placeholder="e.g., James Clear" required>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label>Category <span class="text-danger">*</span></label>
+          <select name="category" class="form-control" required>
+            <option value="">Select Category</option>
+            <option>Education</option>
+            <option>Technology</option>
+            <option>Fiction</option>
+            <option>Self Development</option>
+            <option>History</option>
+            <option>Biography</option>
+            <option>Science</option>
+            <option>Children</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- Book Type -->
+        <div class="form-group">
+          <label>Book Type <span class="text-danger">*</span></label>
+          <div class="type-options">
+            <label class="type-option">
+              <input type="radio" name="book_type" value="physical" required>
+              <span>📖 Physical Book</span>
+            </label>
+            <label class="type-option">
+              <input type="radio" name="book_type" value="digital">
+              <span>💻 Digital Book (PDF)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Physical Book Fields -->
+        <div class="physical-fields">
+          <div class="form-group">
+            <label>Location <span class="text-danger">*</span></label>
+            <input type="text" name="location" class="form-control" placeholder="e.g., Main Library, Shelf B-12">
+            <small class="text-muted">Where can the borrower pick up the book?</small>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label>Description / Notes</label>
+          <textarea name="description" class="form-control" rows="2"
+            placeholder="e.g., Great condition, Available on weekdays"></textarea>
+        </div>
+        <!-- Digital Book Fields -->
+        <div class="digital-fields">
+          <div class="form-group">
+            <label>Upload PDF File</label>
+            <input type="file" name="file" class="form-control" accept=".pdf">
+            <small class="text-muted">Upload PDF file (Max 50MB)</small>
+          </div>
+          <div class="form-group">
+            <label>OR Download Link</label>
+            <input type="url" name="download_link" class="form-control" placeholder="https://drive.google.com/...">
+            <small class="text-muted">Provide Google Drive or direct download link</small>
+          </div>
+        </div>
+        <!-- Book Cover Image -->
+        <div class="form-group">
+          <label>Book Cover Image</label>
+          <input type="file" name="cover_image" class="form-control" accept="image/*">
+          <small class="text-muted">Upload a cover image for your book (JPG, PNG, WebP)</small>
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">➕ Share Book</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Toggle between physical and digital fields
+  const physicalRadio = document.querySelector('input[value="physical"]');
+  const digitalRadio = document.querySelector('input[value="digital"]');
+  const physicalFields = document.querySelector('.physical-fields');
+  const digitalFields = document.querySelector('.digital-fields');
+
+  physicalFields.style.display = 'block';
+  digitalFields.style.display = 'none';
+
+  physicalRadio.addEventListener('change', function () {
+    if (this.checked) {
+      physicalFields.style.display = 'block';
+      digitalFields.style.display = 'none';
+    }
+  });
+
+  digitalRadio.addEventListener('change', function () {
+    if (this.checked) {
+      physicalFields.style.display = 'none';
+      digitalFields.style.display = 'block';
+    }
+  });
+</script>
+
+{% endblock %}

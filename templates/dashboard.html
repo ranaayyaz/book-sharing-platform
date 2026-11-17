@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Book Sharing Platform{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-main">
+  <div class="container">
+    <div class="dashboard-header text-center mb-5">
+      <h1>Welcome {{ current_user.username }} to your Dashboard</h1>
+      <p>Manage your books, requests, and borrowing activity</p>
+    </div>
+
+    <!-- Row 1: Home, Add Book, Profile -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/'">
+          <div class="dashboard-card-icon">🏠</div>
+          <h3 class="dashboard-card-title">Home</h3>
+          <p class="dashboard-card-text">Explore available books in the community library</p>
+          <span class="dashboard-card-link">Go to Home →</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/add_book'">
+          <div class="dashboard-card-icon">➕</div>
+          <h3 class="dashboard-card-title">Add a Book</h3>
+          <p class="dashboard-card-text">Share a new book with the community</p>
+          <span class="dashboard-card-link">Add Now →</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/profile'">
+          <div class="dashboard-card-icon">👤</div>
+          <h3 class="dashboard-card-title">My Profile</h3>
+          <p class="dashboard-card-text">View and update your profile information</p>
+          <span class="dashboard-card-link">View Profile →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: My Shared Books, My Requests, Borrowed Books (with list) -->
+    <div class="row g-4 mb-5">
+
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/requests_sent'">
+          <div class="dashboard-card-icon">📤</div>
+          <h3 class="dashboard-card-title">My Requests</h3>
+          <p class="dashboard-card-text">View status of your borrow requests</p>
+          <span class="dashboard-card-link">View Requests →</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/requests_received'">
+          <div class="dashboard-card-icon">🔔</div>
+          <h3 class="dashboard-card-title">Requests Received</h3>
+          <p class="dashboard-card-text">Borrow requests for your books</p>
+          <span class="dashboard-card-link">View Requests →</span>
+        </div>
+      </div>
+
+
+
+      <!--BORROWED BOOKS CARD  -->
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/borrowed_books'">
+          <div class="dashboard-card-icon">📖</div>
+          <h3 class="dashboard-card-title">Borrowed Books</h3>
+          <p class="dashboard-card-text">Books you have borrowed from others</p>
+          <span class="dashboard-card-link">View Borrowed →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Requests Received, Logout -->
+    <div class="row g-4">
+
+
+      <div class="col-md-4">
+        <div class="dashboard-card" onclick="location.href='/my_books'">
+          <div class="dashboard-card-icon">📚</div>
+          <h3 class="dashboard-card-title">My Shared Books</h3>
+          <p class="dashboard-card-text">View, edit, or remove books you've shared</p>
+          <span class="dashboard-card-link">View Books →</span>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-card logout-card" onclick="location.href='/logout'">
+          <div class="dashboard-card-icon">🚪</div>
+          <h3 class="dashboard-card-title">Logout</h3>
+          <p class="dashboard-card-text">Sign out from your account</p>
+          <span class="dashboard-card-link">Logout →</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

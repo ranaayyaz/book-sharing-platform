@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}My Requests{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
+    <h2>📤 My Borrow Requests</h2>
+    <p>Requests you have sent to book owners</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% if requests %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Book</th>
+                    <th>Owner</th>
+                    <th>Proposed Date</th>
+                    <th>Proposed Time</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Alternative</th>
+                    <th>Reason/Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr
+                    class="{% if req.status == 'rejected' %}table-danger{% elif req.status == 'accepted' %}table-success{% elif req.status == 'alternative_suggested' %}table-info{% endif %}">
+                    <td>{{ req.book.title }}</td>
+                    <td>{{ req.owner.username }}</td>
+                    <td>{{ req.proposed_date }}</td>
+                    <td>{{ req.proposed_time }}</td>
+                    <td>{{ req.proposed_location }}</td>
+
+                    {% if req.status == 'alternative_suggested' %}
+                    <td>
+                        <span class="badge bg-info">Alternative Suggested</span>
+                    </td>
+                    <td>
+                        <small>
+                            📅 {{ req.alternative_date }}<br>
+                            ⏰ {{ req.alternative_time }}<br>
+                            📍 {{ req.alternative_location }}
+                        </small>
+                    </td>
+                    <td>
+                        <a href="/accept_alternative/{{ req.id }}" class="btn btn-sm btn-success">Accept</a>
+                        <a href="/reject_alternative/{{ req.id }}" class="btn btn-sm btn-danger">Reject</a>
+                    </td>
+                    {% else %}
+                    <!--STATUS UPDATED WITH RETURNED -->
+                    <td class="align-middle">
+                        {% if req.status == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% elif req.status == 'accepted' %}
+                        <span class="badge bg-success">Accepted ✓</span>
+                        {% elif req.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected ✗</span>
+                        {% elif req.status == 'returned' or req.status == 'returned_auto' %}
+                        <span class="badge bg-secondary">✅ Returned</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ req.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="align-middle">-</td>
+                    <td class="align-middle">
+                        {% if req.status == 'rejected' and req.rejection_reason %}
+                        {{ req.rejection_reason }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">You haven't sent any requests yet.</div>
+    {% endif %}
+</div>
+
+{% endblock %}

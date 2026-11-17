@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}View User - Admin{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>👤 User Profile: {{ user.username }}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width:150px">ID</th>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Role</th>
+                    <td>{{ user.role }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        {% if user.is_blocked %}
+                        <span class="badge bg-danger">Blocked</span>
+                        {% else %}
+                        <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <a href="/admin/users" class="btn btn-secondary mt-3">← Back to Users</a>
+</div>
+
+{% endblock %}

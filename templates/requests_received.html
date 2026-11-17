@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Requests Received{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
+    <h2>📬 Requests Received</h2>
+    <p>Borrow requests for your books</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% if requests %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Book</th>
+                    <th>Borrower</th>
+                    <th>Proposed Date</th>
+                    <th>Proposed Time</th>
+                    <th>Location</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.book.title }}</td>
+                    <td>{{ req.borrower.username }}</td>
+                    <td>{{ req.proposed_date }}</td>
+                    <td>{{ req.proposed_time }}</td>
+                    <td>{{ req.proposed_location }}</td>
+                    <td>{{ req.message or '-' }}</td>
+                    <td class="align-middle">
+                        {% if req.status == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% elif req.status == 'accepted' %}
+                        <span class="badge bg-success">Accepted</span>
+                        {% elif req.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                        {% elif req.status == 'returned' or req.status == 'returned_auto' %}
+                        <span class="badge bg-secondary">✅ Returned</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ req.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if req.status == 'pending' %}
+                        <a href="/accept_request/{{ req.id }}" class="btn btn-sm btn-success">Accept</a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#rejectModal{{ req.id }}">
+                            Reject
+                        </button>
+                        <a href="/suggest_alternative/{{ req.id }}" class="btn btn-sm btn-info">💡 Suggest
+                            Alternative</a>
+
+                        <!-- Rejection Reason Modal -->
+                        <div class="modal fade" id="rejectModal{{ req.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST" action="/reject_request/{{ req.id }}">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title">Reject Request</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label class="form-label">Reason for rejection:</label>
+                                            <textarea name="rejection_reason" class="form-control" rows="3"
+                                                placeholder="e.g., Book already borrowed, Not available, etc."
+                                                required></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Confirm Reject</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No requests received yet.</div>
+    {% endif %}
+</div>
+
+{% endblock %}

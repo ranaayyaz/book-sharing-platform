@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - Book Details{% endblock %}
+
+{% block content %}
+
+<div class="container book-detail-container mt-4">
+
+    <!-- Book Details Section  -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4>📖 {{ book.title }}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width:150px">Author</th>
+                    <td>{{ book.author }}</td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{ book.category }}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ book.type }}</td>
+                </tr>
+                {% if book.type == 'physical' %}
+                <tr>
+                    <th>Location</th>
+                    <td>{{ book.location or 'Not specified' }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        {% if book.status == 'available' %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-warning">Borrowed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ book.description or 'No description available.' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--BUTTONS SECTION  -->
+    <div class="d-flex justify-content-between align-items-center gap-3">
+        <!-- Borrow Request Button -->
+        {% if not current_user.is_authenticated %}
+        <a href="/login" class="btn btn-primary flex-grow-1 text-center">Login to Request</a>
+
+        {% elif is_owner %}
+        <button class="btn btn-secondary flex-grow-1 text-center" disabled>This is your book</button>
+
+        {% elif book.status == 'borrowed' and has_borrowed %}
+        <a href="/return_book/{{ book.id }}" class="btn btn-warning flex-grow-1 text-center">↩️ Mark as Returned</a>
+
+        {% elif book.status == 'borrowed' %}
+        <button class="btn btn-secondary flex-grow-1 text-center" disabled>Currently Borrowed</button>
+
+        {% else %}
+        {% set req = user_requests.get(book.id) if user_requests else None %}
+
+        {% if req and req.status == 'pending' %}
+        <button class="btn btn-secondary flex-grow-1 text-center" disabled>Request Sent</button>
+
+        {% elif req and req.status == 'rejected' %}
+        <div class="flex-grow-1">
+            <div class="alert alert-danger mb-2">{{ req.rejection_reason }}</div>
+            <a href="/borrow/{{ book.id }}/{{ book.title.replace(' ', '-') }}"
+                class="btn btn-primary w-100 text-center">Request Again</a>
+        </div>
+
+        {% else %}
+        <a href="/borrow/{{ book.id }}/{{ book.title.replace(' ', '-') }}"
+            class="btn btn-success flex-grow-1 text-center">📌 Request to Borrow</a>
+        {% endif %}
+        {% endif %}
+
+        <!-- Back to Home Button -->
+        <a href="/" class="btn btn-secondary">← Back to Home</a>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Sharing Platform{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- HEADER + NAVBAR (Common) -->
+    <header>
+        <nav class="navbar bg-primary">
+            <div class="container">
+
+                <!-- DYNAMIC NAVBAR  -->
+                <div class="d-flex align-items-center justify-content-between w-100">
+
+                    <!-- Logo Section -->
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2784/2784539.png" alt="Book Icon"
+                            style="width: 30px;">
+                        <h5 class="text-white mb-0">Book Sharing Platform</h5>
+                    </div>
+
+                    <!-- Center Heading (Only for Admin) -->
+                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    <h5 class="text-white mb-0 mx-auto">Admin Panel</h5>
+                    {% endif %}
+
+                    <!-- Right Side Buttons -->
+                    <div class="d-flex gap-3 align-items-center">
+
+                        {% if not current_user.is_authenticated %}
+                        <!-- LOGGED OUT USERS -->
+                        <a href="{{ url_for('login') }}"><button type="button"
+                                class="btn btn-light btn-sm">Login</button></a>
+                        <a href="{{ url_for('register') }}"><button type="button" class="btn btn-light btn-sm">Sign
+                                Up</button></a>
+                        {% else %}
+
+                        <!-- NOTIFICATION BELL (for all users) -->
+                        <div class="position-relative">
+                            <a href="{{ url_for('notifications') }}" class="text-white" style="font-size: 1.2rem;">
+                                🔔
+                                {% if current_user.notification_count > 0 %}
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                    style="font-size: 10px;">
+                                    {{ current_user.notification_count }}
+                                </span>
+                                {% endif %}
+                            </a>
+                        </div>
+
+                        <!-- ADMIN BUTTONS -->
+                        {% if current_user.role == 'admin' %}
+                        {% if request.endpoint != 'admin_dashboard' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-light btn-sm">Dashboard</a>
+                        {% endif %}
+                        {% endif %}
+                        {% if current_user.role != 'admin' and request.endpoint != 'dashboard' %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-sm">Dashboard</a>
+                        {% endif %}
+                        <!-- LOGOUT BUTTON (for all users) -->
+                        <a href="{{ url_for('logout') }}" class="btn btn-light btn-sm">Logout</a>
+
+                        <!-- NORMAL USER DASHBOARD BUTTON -->
+
+
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER (Common) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>📚 Book Sharing Platform</h5>
+                    <p>Share and borrow physical & digital books. Community library for everyone.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('add_book') }}">Add Book</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <p>📧 ayyazrana033@gmail.com</p>
+                    <p>📞 +92 309 7613341</p>
+                    <p>📍 Virtual University of Pakistan</p>
+                </div>
+            </div>
+            <hr class="footer-hr">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>© 2026 Book Sharing Platform | Group F25PROJECTC7D20 | Supervisor: Muhammad Ilyas</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
