@@ -12,6 +12,7 @@
             <h4>📖 {{ book.title }}</h4>
         </div>
         <div class="card-body">
+            <div class="table-responsive">
             <table class="table table-bordered">
                 <tr>
                     <th style="width:150px">Author</th>
@@ -46,6 +47,7 @@
                     <td>{{ book.description or 'No description available.' }}</td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
 

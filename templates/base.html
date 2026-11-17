@@ -88,31 +88,34 @@
     <!-- FOOTER (Common) -->
     <footer class="footer">
         <div class="container">
-            <div class="row">
+            <div class="row gy-4">
                 <div class="col-md-4">
-                    <h5>📚 Book Sharing Platform</h5>
-                    <p>Share and borrow physical & digital books. Community library for everyone.</p>
+                    <h5 class="footer-brand">📚 Book Sharing Platform</h5>
+                    <p class="footer-about">A community library where readers share and borrow physical &amp; digital
+                        books — making knowledge accessible to everyone, everywhere.</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul>
                         <li><a href="{{ url_for('home') }}">Home</a></li>
                         <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('my_books') }}">My Books</a></li>
                         <li><a href="{{ url_for('add_book') }}">Add Book</a></li>
+                        <li><a href="{{ url_for('notifications') }}">Notifications</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5>Contact</h5>
+                    <h5>Contact Us</h5>
                     <p>📧 ayyazrana033@gmail.com</p>
                     <p>📞 +92 309 7613341</p>
-                    <p>📍 Virtual University of Pakistan</p>
+                    <p>📍 Lahore, Punjab, Pakistan</p>
                 </div>
             </div>
-            <hr class="footer-hr">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p>© 2026 Book Sharing Platform | Group F25PROJECTC7D20 | Supervisor: Muhammad Ilyas</p>
-                </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                <p class="mb-0">© 2026 Book Sharing Platform. All rights reserved.</p>
+                <p class="mb-0">Developed by <strong>Muhammad Ayyaz Abid</strong></p>
             </div>
         </div>
     </footer>
