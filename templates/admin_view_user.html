@@ -4,14 +4,14 @@
 
 {% block content %}
 
-<div class="container mt-4" style="max-width: 1000px; margin: 0 auto;">
-    <div class="card">
+<div class="container mt-4 admin-page" style="max-width: 1000px; margin: 0 auto;">
+    <div class="card admin-card">
         <div class="card-header bg-primary text-white">
             <h4>👤 User Profile: {{ user.username }}</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table admin-detail-table">
                 <tr>
                     <th style="width:150px">ID</th>
                     <td>{{ user.id }}</td>
@@ -44,7 +44,7 @@
     </div>
 
 
-    <a href="/admin/users" class="btn btn-secondary mt-3">← Back to Users</a>
+    <a href="/admin/users" class="btn btn-admin-back mt-3">← Back to Users</a>
 </div>
 
 {% endblock %}

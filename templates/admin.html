@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="dashboard-main">
+<div class="dashboard-main admin-page admin-dashboard">
     <div class="container">
         <div class="dashboard-header text-center mb-5">
             <h1>Welcome to Admin Panel</h1>
@@ -16,7 +16,7 @@
 
             <!-- Card 1: Total Users -->
             <div class="col-md-4">
-                <div class="dashboard-card" onclick="location.href='/admin/users'">
+                <div class="dashboard-card admin-stat stat-users" onclick="location.href='/admin/users'">
                     <div class="dashboard-card-icon">👥</div>
                     <h3 class="dashboard-card-title">{{ users|length }}</h3>
                     <p class="dashboard-card-text">Total Users</p>
@@ -26,7 +26,7 @@
 
             <!-- Card 2: Total Books -->
             <div class="col-md-4">
-                <div class="dashboard-card" onclick="location.href='/admin/books'">
+                <div class="dashboard-card admin-stat stat-books" onclick="location.href='/admin/books'">
                     <div class="dashboard-card-icon">📚</div>
                     <h3 class="dashboard-card-title">{{ books|length }}</h3>
                     <p class="dashboard-card-text">Total Books</p>
@@ -36,7 +36,7 @@
 
             <!-- Card 3: Blocked Users -->
             <div class="col-md-4">
-                <div class="dashboard-card" onclick="location.href='/admin/blocked-users'">
+                <div class="dashboard-card admin-stat stat-blocked" onclick="location.href='/admin/blocked-users'">
                     <div class="dashboard-card-icon">🚫</div>
                     <h3 class="dashboard-card-title">{{ users|selectattr('is_blocked', 'equalto', True)|list|length }}
                     </h3>
@@ -50,7 +50,7 @@
         <!-- Row 2: Logout Card (Centered) -->
         <div class="row g-4">
             <div class="col-md-4 mx-auto">
-                <div class="dashboard-card logout-card" onclick="location.href='/logout'">
+                <div class="dashboard-card logout-card admin-stat stat-logout" onclick="location.href='/logout'">
                     <div class="dashboard-card-icon">🚪</div>
                     <h3 class="dashboard-card-title">Logout</h3>
                     <p class="dashboard-card-text">Sign out from admin panel</p>
