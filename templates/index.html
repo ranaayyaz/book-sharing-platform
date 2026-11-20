@@ -11,10 +11,11 @@
 
 {% block content %}
 
-<!-- Search Section -->
-<div class="search-section">
+<!-- Hero / Search Section -->
+<div class="hero-section">
   <div class="container">
-    <h1>Welcome to the Community Library</h1>
+    <span class="hero-badge">📚 Community Library &nbsp;•&nbsp; Physical Books &nbsp;•&nbsp; Digital PDFs</span>
+    <h1>Welcome to the <span class="hero-accent">Community Library</span></h1>
 
     {% if search_query %}
     <div class="alert alert-info">
@@ -35,6 +36,24 @@
         <button type="submit" class="buton">Search</button>
       </form>
     </div>
+
+    <div class="hero-features">
+      <div class="hero-feature">
+        <div class="hero-feature-icon">📖</div>
+        <h6>Share Your Books</h6>
+        <p>List books you own and let other readers borrow them.</p>
+      </div>
+      <div class="hero-feature">
+        <div class="hero-feature-icon">🔄</div>
+        <h6>Borrow &amp; Return</h6>
+        <p>Send a request, the owner accepts, and you start reading.</p>
+      </div>
+      <div class="hero-feature">
+        <div class="hero-feature-icon">📄</div>
+        <h6>Read PDFs Online</h6>
+        <p>Digital books open instantly — no waiting, no travel.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -43,7 +62,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h4 class="margin">📚 Available Books</h4>
+        <h4 class="margin section-title">📚 Available Books <span class="count-badge">{{ books|length }} books</span></h4>
       </div>
     </div>
     <div class="row">
