@@ -4,49 +4,52 @@
 
 {% block content %}
 
-<div class="container book-detail-container mt-4">
+<div class="container book-detail-container book-detail-page mt-4">
 
     <!-- Book Details Section  -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h4>📖 {{ book.title }}</h4>
-        </div>
+    <div class="card admin-card detail-card mb-4">
         <div class="card-body">
-            <div class="table-responsive">
-            <table class="table table-bordered">
-                <tr>
-                    <th style="width:150px">Author</th>
-                    <td>{{ book.author }}</td>
-                </tr>
-                <tr>
-                    <th>Category</th>
-                    <td>{{ book.category }}</td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td>{{ book.type }}</td>
-                </tr>
-                {% if book.type == 'physical' %}
-                <tr>
-                    <th>Location</th>
-                    <td>{{ book.location or 'Not specified' }}</td>
-                </tr>
-                {% endif %}
-                <tr>
-                    <th>Status</th>
-                    <td>
-                        {% if book.status == 'available' %}
-                        <span class="badge bg-success">Available</span>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="detail-cover">
+                        <img src="{{ book.cover_image if book.cover_image and book.cover_image.startswith('http') else '/static/uploads/covers/' ~ (book.cover_image or 'default.jpg') }}"
+                            alt="{{ book.title }} cover">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h2 class="detail-title">📖 {{ book.title }}</h2>
+                    <p class="detail-author">by {{ book.author }}</p>
+                    <div class="tags detail-tags">
+                        {% if book.type == 'physical' %}
+                        <span class="tag green">Physical</span>
                         {% else %}
-                        <span class="badge bg-warning">Borrowed</span>
+                        <span class="tag blue">Digital (PDF)</span>
                         {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ book.description or 'No description available.' }}</td>
-                </tr>
-            </table>
+                        <span class="tag gray">{{ book.category }}</span>
+                        {% if book.status == 'available' %}
+                        <span class="tag tag-available">Available</span>
+                        {% else %}
+                        <span class="tag tag-borrowed">Borrowed</span>
+                        {% endif %}
+                    </div>
+                    <p class="detail-description">{{ book.description or 'No description available.' }}</p>
+                    <table class="table admin-detail-table detail-meta">
+                        {% if book.type == 'physical' %}
+                        <tr>
+                            <th style="width:150px">Location</th>
+                            <td>{{ book.location or 'Not specified' }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Type</th>
+                            <td>{{ 'Physical Book' if book.type == 'physical' else 'Digital (PDF)' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{{ 'Available to borrow' if book.status == 'available' else 'Currently borrowed' }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -86,7 +89,7 @@
         {% endif %}
 
         <!-- Back to Home Button -->
-        <a href="/" class="btn btn-secondary">← Back to Home</a>
+        <a href="/" class="btn btn-admin-back">← Back to Home</a>
     </div>
 
 </div>
